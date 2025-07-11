@@ -5,6 +5,11 @@ const todoInput = document.getElementById("todo-input");
 const dateInput = document.getElementById("date-input");
 const todoList = document.getElementById("todo-list");
 const filterInput = document.getElementById("filter-input");
+const showDeletedBtn = document.getElementById("show-deleted");
+const showActiveBtn = document.getElementById("show-active");
+
+let activeTasks = [];
+let deletedTasks = [];
 
 // Event submit form
 todoForm.addEventListener("submit", function(e) {
@@ -18,17 +23,10 @@ todoForm.addEventListener("submit", function(e) {
         alert("Please fill in both task and date.");
         return;
     }
-
-    // Buat lits baru
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-        <td>${task}</td>
-        <td>${date}</td>
-        <td><button class="delete-btn">Delete</button></td>
-    `;
-
-    todoList.appendChild(tr);
-
+    
+    activeTasks.push({ id: Date.now(), task, date });
+    renderActiveTasks();
+    
     // Bersihkan input
     todoInput.value = "";
     dateInput.value = "";
@@ -38,25 +36,21 @@ todoForm.addEventListener("submit", function(e) {
 todoList.addEventListener("click", function(e) {
     if (e.target.classList.contains("delete-btn")) {
         if (confirm("Are you sure you want to delete this task?")) {
-            e.target.parentElement.parentElement.remove();
+            const id = parseInt(e.target.getAttribute("data-id"));
+            const index = activeTasks.findIndex(task => task.id === id);
+            // deletedTasks.push(removed);
+            // renderActiveTasks();
+            if (index !== -1) {
+                const removed = activeTasks.splice(index, 1)[0];
+                deletedTasks.push(removed);
+                renderActiveTasks();
+            }
         }
     }
+    
 });
 
-// Event filter
-// filterInput.addEventListener("keyup", function(e) {
-//     const text = e.target.value.toLowerCase();
-//     const items = todoList.getElementsByTagName("tr");
-
-//     Array.from(rows).forEach(function(row) {
-//         const taskText = row.cells[0].textContent.toLowerCase();
-//         if (taskText.indexOf(text) != -1) {
-//             row.style.display = "";
-//         } else {
-//             row.style.display = "none";
-//         }
-//     });
-// });
+// filter
 filterInput.addEventListener("keyup", function(e) {
     const text = e.target.value.toLowerCase();
     const rows = todoList.getElementsByTagName("tr");
@@ -93,3 +87,46 @@ filterInput.addEventListener("keyup", function(e) {
     });
 });
 
+// History
+showDeletedBtn.addEventListener("click", function() {
+    while (todoList.firstChild) {
+        todoList.removeChild(todoList.firstChild);
+    }
+
+    // Tampilkan task yang dihapus
+    deletedTasks.forEach(function(item) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>${item.task}</td>
+            <td>${item.date}</td>
+            <td><em>Deleted</em></td>
+        `;
+        todoList.appendChild(tr);
+    });
+});
+// tombol kembali
+showActiveBtn.addEventListener("click", function() {
+    // while (todoList.firstChild) {
+    //     todoList.removeChild(todoList.firstChild);
+    // }
+    // location.reload(); 
+    renderActiveTasks();
+});
+
+function renderActiveTasks() {
+    // Hapus row
+    while (todoList.firstChild) {
+        todoList.removeChild(todoList.firstChild);
+    }
+
+    // Tampilkan task yang aktif
+    activeTasks.forEach(function(item) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>${item.task}</td>
+            <td>${item.date}</td>
+            <td><button class="delete-btn" data-id="${item.id}">Delete</button></td>
+        `;
+        todoList.appendChild(tr);
+    });
+}
