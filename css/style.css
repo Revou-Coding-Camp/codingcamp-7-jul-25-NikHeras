@@ -80,17 +80,17 @@ table {
 }
 
 th, td {
-    border: 1px solid #ddd;
+    border: 1px solid white;
     padding: 8px;
     text-align: left;
 }
 
 th {
-    background-color: #f2f2f2;
+    background-color: white;
 }
 
 .delete-btn {
-    background-color: #f44336;
+    background-color: red;
     color: white;
     border: none;
     padding: 5px 8px;
@@ -100,5 +100,5 @@ th {
 }
 
 .delete-btn:hover {
-    background-color: #da190b;
+    background-color: red;
 }
