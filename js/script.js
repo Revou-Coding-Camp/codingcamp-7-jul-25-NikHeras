@@ -1,3 +1,4 @@
+console.log('lagi jalan');
 // Ambil elemen dari HTML
 const todoForm = document.getElementById("todo-form");
 const todoInput = document.getElementById("todo-input");
@@ -18,14 +19,15 @@ todoForm.addEventListener("submit", function(e) {
         return;
     }
 
-    // Buat li baru
-    const li = document.createElement("li");
-    li.innerHTML = `
-        <span>${task} - ${date}</span>
-        <button class="delete-btn">Delete</button>
+    // Buat lits baru
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+        <td>${task}</td>
+        <td>${date}</td>
+        <td><button class="delete-btn">Delete</button></td>
     `;
 
-    todoList.appendChild(li);
+    todoList.appendChild(tr);
 
     // Bersihkan input
     todoInput.value = "";
@@ -36,22 +38,58 @@ todoForm.addEventListener("submit", function(e) {
 todoList.addEventListener("click", function(e) {
     if (e.target.classList.contains("delete-btn")) {
         if (confirm("Are you sure you want to delete this task?")) {
-            e.target.parentElement.remove();
+            e.target.parentElement.parentElement.remove();
         }
     }
 });
 
 // Event filter
+// filterInput.addEventListener("keyup", function(e) {
+//     const text = e.target.value.toLowerCase();
+//     const items = todoList.getElementsByTagName("tr");
+
+//     Array.from(rows).forEach(function(row) {
+//         const taskText = row.cells[0].textContent.toLowerCase();
+//         if (taskText.indexOf(text) != -1) {
+//             row.style.display = "";
+//         } else {
+//             row.style.display = "none";
+//         }
+//     });
+// });
 filterInput.addEventListener("keyup", function(e) {
     const text = e.target.value.toLowerCase();
-    const items = todoList.getElementsByTagName("li");
+    const rows = todoList.getElementsByTagName("tr");
 
-    Array.from(items).forEach(function(item) {
-        const itemText = item.firstElementChild.textContent.toLowerCase();
-        if (itemText.indexOf(text) != -1) {
-            item.style.display = "flex";
-        } else {
-            item.style.display = "none";
+    const matched = []; // array untuk menyimpan yang cocok
+    const unmatched = []; // array untuk menyimpan yang tidak cocok
+
+    Array.from(rows).forEach(function(row) {
+        if (row.cells.length > 0) {
+            const taskText = row.cells[0].textContent.toLowerCase();
+            if (taskText.indexOf(text) != -1) {
+                matched.push(row);
+            } else {
+                unmatched.push(row);
+            }
         }
     });
+
+    // Hapus semua row dari table
+    while (todoList.firstChild) {
+        todoList.removeChild(todoList.firstChild);
+    }
+
+    // Tambahkan yang cocok di atas
+    matched.forEach(function(row) {
+        todoList.appendChild(row);
+        row.style.display = ""; // pastikan ditampilkan
+    });
+
+    // Tambahkan yang tidak cocok di bawah, sembunyikan
+    unmatched.forEach(function(row) {
+        todoList.appendChild(row);
+        row.style.display = "none";
+    });
 });
+

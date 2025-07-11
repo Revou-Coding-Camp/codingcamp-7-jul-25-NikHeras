@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f7f7f7;
+    background-color: gray;
     margin: 0;
     padding: 0;
 }
@@ -32,7 +32,7 @@ form input[type="date"] {
 
 form button {
     padding: 10px;
-    background-color: #4CAF50;
+    background-color: rgb(9, 130, 130);
     color: white;
     border: none;
     cursor: pointer;
@@ -40,7 +40,7 @@ form button {
 }
 
 form button:hover {
-    background-color: #45a049;
+    background-color: green;
 }
 
 .filter-section {
@@ -48,9 +48,14 @@ form button:hover {
 }
 
 #filter-input {
-    width: 100%;
-    padding: 8px;
+    width: 94%;
+    padding: 10px;
     font-size: 14px;
+}
+
+h2{
+   text-align: center;
+   font-size: 20px; 
 }
 
 #todo-list {
@@ -59,7 +64,7 @@ form button:hover {
     margin-top: 20px;
 }
 
-#todo-list li {
+/* #todo-list li {
     background: #eee;
     margin-bottom: 10px;
     padding: 10px;
@@ -67,6 +72,21 @@ form button:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
+} */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
 }
 
 .delete-btn {
